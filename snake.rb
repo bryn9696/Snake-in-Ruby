@@ -32,6 +32,15 @@ class Snake
     end
   end
 
+  def can_change_direction?(new_direction)
+    case @direction
+      when 'up' then new_direction != 'down'
+      when 'down' then new_direction != 'up'
+      when 'left' then new_direction != 'right'
+      when 'right' then new_direction != 'left'
+    end
+  end
+
   private
 
   def snake_head
@@ -50,7 +59,7 @@ end
 
 on :key_down do |event|
   if ['up', 'down', 'left', 'right'].include?(event.key)
-    if snake_can_change_direction?(event.key)
+    if snake.can_change_direction?(event.key)
       snake.direction = event.key
     end
   end
