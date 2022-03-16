@@ -4,6 +4,9 @@ set background: 'navy'
 set fps_cap: 10
 
 GRID_SIZE = 20
+GRID_WIDTH = Window.width / GRID_SIZE
+GRID_HEIGHT = Window.height / GRID_SIZE
+
 class Snake
   attr_writer :direction
 
@@ -22,13 +25,13 @@ class Snake
     @positions.shift
     case @direction 
     when 'down'
-      @positions.push([snake_head[0], snake_head[1] + 1])
+      @positions.push(new_coords(snake_head[0], snake_head[1] + 1))
     when 'up'
-      @positions.push([snake_head[0], snake_head[1] - 1])
+      @positions.push(new_coords(snake_head[0], snake_head[1] - 1))
     when 'left'
-      @positions.push([snake_head[0] - 1, snake_head[1]])
+      @positions.push(new_coords(snake_head[0] - 1, snake_head[1]))
     when 'right'
-      @positions.push([snake_head[0] + 1, snake_head[1]])
+      @positions.push(new_coords(snake_head[0] + 1, snake_head[1]))
     end
   end
 
@@ -43,13 +46,16 @@ class Snake
 
   private
 
+  def new_coords(x, y)
+    [x % GRID_WIDTH, y % GRID_HEIGHT]
+  end
+
   def snake_head
     @positions.last
   end
 end
 
 snake = Snake.new
-
 
 update do
   clear
