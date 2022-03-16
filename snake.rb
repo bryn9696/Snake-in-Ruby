@@ -55,7 +55,16 @@ class Snake
   end
 end
 
+class Game
+  def initialize
+    @score = 0
+    @food_x = rand(GRID_WIDTH)
+    @food_y = rand(GRID_HEIGHT)
+  end
+end
+
 snake = Snake.new
+game = Game.new
 
 update do
   clear
