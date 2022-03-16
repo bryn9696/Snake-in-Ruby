@@ -1,7 +1,7 @@
 require 'ruby2d'
 
 set background: 'navy'
-set fps_cap: 10
+set fps_cap: 15
 
 GRID_SIZE = 20
 GRID_WIDTH = Window.width / GRID_SIZE
@@ -44,6 +44,14 @@ class Snake
     end
   end
 
+  def x
+    snake_head[0]
+  end
+
+  def y
+    snake_head[1]
+  end
+
   private
 
   def new_coords(x, y)
@@ -64,6 +72,17 @@ class Game
 
   def draw
     Square.new(x: @food_x * GRID_SIZE, y: @food_y * GRID_SIZE, size: GRID_SIZE, color: 'green')
+    Text.new("Score: #{@score}", color: 'green', x: 10, y: 10, size: 25, z: 1)
+  end
+
+  def snake_hit_food?(x, y)
+    @food_x == x && @food_y == y
+  end
+
+  def record_hit
+    @score += 1
+    @food_x = rand(GRID_WIDTH)
+    @food_y = rand(GRID_HEIGHT)
   end
 end
 
@@ -75,6 +94,10 @@ update do
   snake.move
   snake.draw
   game.draw
+
+  if game.snake_hit_food?(snake.x, snake.y)
+    game.record_hit
+  end
 end
 
 on :key_down do |event|
