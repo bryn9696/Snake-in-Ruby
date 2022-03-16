@@ -61,6 +61,10 @@ class Game
     @food_x = rand(GRID_WIDTH)
     @food_y = rand(GRID_HEIGHT)
   end
+
+  def draw
+    Square.new(x: @food_x * GRID_SIZE, y: @food_y * GRID_SIZE, size: GRID_SIZE, color: 'green')
+  end
 end
 
 snake = Snake.new
@@ -70,6 +74,7 @@ update do
   clear
   snake.move
   snake.draw
+  game.draw
 end
 
 on :key_down do |event|
