@@ -113,7 +113,7 @@ class Game
 
   def text_message
     if finished?
-      "Game over! Your score was #{@score}"
+      "Game over! Your score was #{@score}. Press 'R' to restart"
     else
       "Score: #{@score}"
     end
@@ -145,9 +145,11 @@ end
 on :key_down do |event|
   if ['up', 'down', 'left', 'right'].include?(event.key)
     if snake.can_change_direction?(event.key)
-      snake.direction = event.key
-      
+      snake.direction = event.key      
     end
+  elsif event.key == 'r'
+    snake = Snake.new
+    game = Game.new
   end
 end
 
