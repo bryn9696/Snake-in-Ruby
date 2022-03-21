@@ -61,6 +61,10 @@ class Snake
     @growing = true
   end
 
+  def hit_self?
+    @positions.uniq.length != @positions.length
+  end
+
   private
 
   def new_coords(x, y)
@@ -77,11 +81,14 @@ class Game
     @score = 0
     @food_x = rand(GRID_WIDTH)
     @food_y = rand(GRID_HEIGHT)
+    @finished = false
   end
 
   def draw
-    Square.new(x: @food_x * GRID_SIZE, y: @food_y * GRID_SIZE, size: GRID_SIZE, color: 'green')
-    Text.new("Score: #{@score}", color: 'green', x: 10, y: 10, size: 25, z: 1)
+    unless finished?
+      Square.new(x: @food_x * GRID_SIZE, y: @food_y * GRID_SIZE, size: GRID_SIZE, color: 'green')
+    end
+      Text.new(text_message, color: 'green', x: 10, y: 10, size: 25, z: 1)
   end
 
   def snake_hit_food?(x, y)
@@ -93,6 +100,25 @@ class Game
     @food_x = rand(GRID_WIDTH)
     @food_y = rand(GRID_HEIGHT)
   end
+
+  def finish
+    @finished = true
+  end
+
+  def finished?
+    @finished
+  end
+
+  private
+
+  def text_message
+    if finished?
+      "Game over! Your score was #{@score}"
+    else
+      "Score: #{@score}"
+    end
+  end
+
 end
 
 snake = Snake.new
@@ -100,13 +126,19 @@ game = Game.new
 
 update do
   clear
-  snake.move
+  unless game.finished?
+    snake.move
+  end
   snake.draw
   game.draw
 
   if game.snake_hit_food?(snake.x, snake.y)
     game.record_hit
     snake.grow
+  end
+
+  if snake.hit_self?
+    game.finish
   end
 end
 
